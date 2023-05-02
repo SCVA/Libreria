@@ -2,11 +2,18 @@ package exercise.libreria;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+
+import exercise.libreria.data.DAOLibreria;
+import exercise.libreria.data.Persona;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +30,13 @@ public class RegisterFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private Button btnRegistrar;
+    private EditText id;
+    private EditText name;
+    private EditText password;
+    private DAOLibreria DAO;
+
 
     public RegisterFragment() {
         // Required empty public constructor
@@ -60,5 +74,26 @@ public class RegisterFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate( R.layout.fragment_register, container, false );
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        DAOLibreria DAO = new DAOLibreria( view.getContext());
+        id = (EditText) view.findViewById( R.id.editTextID );
+        name = (EditText) view.findViewById( R.id.editTextTextPersonName );
+        password = (EditText) view.findViewById( R.id.editTextTextPassword ) ;
+        btnRegistrar = (Button) view.findViewById( R.id.buttonRegister2 );
+        btnRegistrar.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Persona personaagardar = new Persona(
+                        Integer.parseInt(id.getText().toString()),
+                        name.getText().toString(),
+                        password.getText().toString()
+                );
+                DAO.savePersona(personaagardar);
+            }
+        } );
+        super.onViewCreated( view, savedInstanceState );
     }
 }
